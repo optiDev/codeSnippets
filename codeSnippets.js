@@ -254,3 +254,25 @@ function fireReq(url, index) {
    request.onerror = function() {};
    request.send();
 }
+
+// Get long month name from date
+var optiTravelDate = new Date('01/01/2018');
+var optiTravelMonth = optiTravelDate.toLocaleString('en-us', {
+    month: "long"
+});
+
+// Smooth scroll function
+function optiSideScroll(element, direction, speed, distance, step) {
+    scrollAmount = 0;
+    var slideTimer = setInterval(function () {
+        if (direction == 'left') {
+            element.scrollLeft -= step;
+        } else {
+            element.scrollLeft += step;
+        }
+        scrollAmount += step;
+        if (scrollAmount >= distance) {
+            window.clearInterval(slideTimer);
+        }
+    }, speed);
+}
