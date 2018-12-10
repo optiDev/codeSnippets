@@ -303,3 +303,17 @@ var eventFunction = optiDebounce(function () {
 }, 250);
 
 element.addEventListener(event, eventFunction);
+
+// Delay function on hover events
+function delay(element, callback) {
+    var timeout = null;
+    element.addEventListener('mouseover', function () {
+        // Fires callback event after 600ms
+        timeout = setTimeout(callback, 600);
+    });
+
+    // If mouse out then clear timeout (won't call the callbakc function)
+    element.addEventListener('mouseout', function () {
+        clearTimeout(timeout);
+    });
+}
