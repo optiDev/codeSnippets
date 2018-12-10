@@ -312,7 +312,7 @@ function delay(element, callback) {
         timeout = setTimeout(callback, 600);
     });
 
-    // If mouse out then clear timeout (won't call the callbakc function)
+    // If mouse out then clear timeout (won't call the callback function)
     element.addEventListener('mouseout', function () {
         clearTimeout(timeout);
     });
