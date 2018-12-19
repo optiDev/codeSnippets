@@ -1,65 +1,84 @@
-//Prepend
+/*-----Prepend element before another element-----*/
 var placeToMoveTo = document.querySelector("[SELECTOR]");
 var itemToMove = document.querySelector("[SELECTOR]");
 placeToMoveTo.insertBefore(itemToMove, placeToMoveTo.firstChild);
 
-//Append
+
+/*-----Append element after another element-----*/
 var placeToMove = document.querySelector("[SELECTOR]");
 var thingToMove = document.querySelector("[SELECTOR]");
 placeToMove.appendChild(thingToMove);
 
-// Delete element
+
+/*-----Delete element-----*/
 var elementToRemove = document.querySelector("[SELECTOR]");
 element.parentNode.removeChild(elementToRemove);
 
-// Move element to before sibling
-//
-// Move element "up":
-if(element.previousElementSibling)
+
+/*-----Move element relative to sibling-----*/
+/*-----Move element "up":-----*/
+if(element.previousElementSibling) {
   element.parentNode.insertBefore(element, element.previousElementSibling);
-
-//  Move element "down":
-if(element.nextElementSibling)
+}
+/*-----Move element "down":-----*/
+if(element.nextElementSibling) {
   element.parentNode.insertBefore(element.nextElementSibling, element);
+}
 
-//Loop
+
+/*-----Interval to wait for Element-----*/
 var myLoop = setInterval(function () {
-
+  var elementToWaitFor = document.querySelector("[SELECTOR]");
+  if (elementToWaitFor) {
+    clearInterval(myLoop);
+  }
 }, timeoutInMs);
 
-//Insert Adjacent HTML
+
+/*-----Insert Adjacent HTML------*/
 document.querySelector("[SELECTOR]").insertAdjacentHTML('[beforebegin, beforeend, afterbegin, afterend]', '[CONTENT]');
 
-//Convert Nodelist to Array
+
+/*-----Convert Nodelist to Array-----*/
 var myArr = Array.prototype.slice.call(document.querySelectorAll("[SELECTOR]"));
 
-//Loop through Array
-myArr.forEach(function (item, index) {
+
+/*-----Loop through Array-----*/
+myArr.forEach(function(item, index) {
+
+});
+/*-----OR-----*/
+myArr.map(function(item, index) {
 
 });
 
-//Local storage
+
+/*-----TUI Local storage-----*/
 JSON.parse(localStorage.getItem("user-search-data-th"))
 
-//Accordion click event
+
+/*-----Click event for Accordion-----*/
 document.querySelector("[SELECTOR]").onclick = accordionFunction;
 
 function accordionFunction() {
     this.classList.toggle("minimised");
 }
 
-//On click event
+
+/*-----On click event-----*/
 document.querySelector("[SELECTOR]").onclick = clickFunction;
 
 function clickFunction() {
     // Do Something
 }
 
-//Event Tracking 
+
+/*-----Event Tracking-----*/
 window.optimizationVar = "[OPTI_EVENT NAME]"; // Call this something related to the event
 Bootstrapper.ensEvent.trigger("Global Optimization Event"); //Fire the Ensighten event which references the variable (Don't change)
 
-//Check & Set Cookie
+
+/*-----Check & Set Cookie-----*/
 function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
@@ -87,10 +106,7 @@ function checkCookie(cname, cvalue, exdays) {
 }
 checkCookie("cruiseCheck", "true", 60);
 
-//Sticky Scroll
-var stickyEl = document.querySelector("[MY ELEMENT]")
-var stickyHeight = stickyEl.getBoundingClientRect().top;
-
+/*-----Debounce function to stop firing events too frequently-----*/
 function debounce(func, wait, immediate) {
     var timeout;
     return function () {
@@ -98,14 +114,23 @@ function debounce(func, wait, immediate) {
             args = arguments;
         var later = function () {
             timeout = null;
-            if (!immediate) func.apply(context, args);
+            if (!immediate) {
+              func.apply(context, args);
+            }
         };
         var callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
+        if (callNow) {
+          func.apply(context, args);
+        }
     };
 };
+
+
+/*-----Sticky Scroll------*/
+var stickyEl = document.querySelector("[MY ELEMENT]")
+var stickyHeight = stickyEl.getBoundingClientRect().top;
 
 var stickyFn = debounce(function () {
     var cl = document.body.classList;
@@ -114,8 +139,8 @@ var stickyFn = debounce(function () {
 
 window.addEventListener('scroll', stickyFn);
 
-//Sticky Option 2
 
+/*-----Sticky Option 2-----*/
 var stickyEl = document.querySelector("[SELECTOR]");
 var stickWait = setInterval(function () {
     if (stickyEl) {
@@ -134,35 +159,15 @@ var stickWait = setInterval(function () {
     }
 }, 300);
 
-//Add Script
+
+/*-----Add Script to page-----*/
 var tag = document.createElement("script");
 tag.src = "[SCRIPT SOURCE]";
 tag.id = "[SCRIPT ID]";
 document.getElementsByTagName("body")[0].appendChild(tag);
 
-//Bind multiple elements
-var bindLoop = setInterval(function () { //Loops continuously looking for new elements
 
-    var myElement = document.querySelector("[SELECTOR]:not(.bound)")
-
-    if (myElement) { //Looks for element not bound, if none-found, doesn't run
-
-        var myArr = Array.prototype.slice.call(myElement); //Create array of unbound elements
-
-        myArr.forEach(function (item, index) { //Loop through each unbound element
-            item.classList.add("bound"); //Give it a class of bound so it doesn't rebind the event to the element
-            function myFunction() { //Function to fire the event
-                window.optimizationVar = "[OPTI_EVENT NAME]"; // Call this something related to the event
-                Bootstrapper.ensEvent.trigger("Global Optimization Event"); //Fire the Ensighten event which references the variable (Don't change)
-            }
-            item.onclick = myFunction; //Bind the function to the element
-        });
-
-    }
-
-}, 300);
-
-//Search results
+/*-----Search results data (DOJO)----*/
 function optiFn(data) {
     var searchArr = Array.prototype.slice.call(document.querySelectorAll(".results-list > li:not(.bound)"));
     console.log(searchArr);
@@ -198,7 +203,8 @@ var dijitW = setInterval(function () {
     }
 }, 300);
 
-// Get element(s) from another page
+
+/*-----Example XHR request----*/
 var productsList = Array.prototype.slice.call(document.querySelectorAll(".m7-products li.product"));
 var myProducts = [];
 var myCount = 0;
@@ -255,13 +261,15 @@ function fireReq(url, index) {
    request.send();
 }
 
-// Get long month name from date
+
+/*-----Get long month name from date-----*/
 var optiTravelDate = new Date('01/01/2018');
 var optiTravelMonth = optiTravelDate.toLocaleString('en-us', {
     month: "long"
 });
 
-// Smooth scroll function
+
+/*-----Smooth scroll function-----*/
 function optiSideScroll(element, direction, speed, distance, step) {
     scrollAmount = 0;
     var slideTimer = setInterval(function () {
@@ -277,34 +285,8 @@ function optiSideScroll(element, direction, speed, distance, step) {
     }, speed);
 }
 
-// Debounce function and usage
-function optiDebounce(func, wait, immediate) {
-    var timeout;
-    return function () {
-        var context = this,
-            args = arguments;
-        var later = function () {
-            timeout = null;
-            if (!immediate) {
-                func.apply(context, args);
-            }
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) {
-            func.apply(context, args);
-        }
-    };
-};
 
-var eventFunction = optiDebounce(function () {
-    // Do something
-}, 250);
-
-element.addEventListener(event, eventFunction);
-
-// Delay function on hover events
+/*-----Delay function on hover events*/
 function delay(element, callback) {
     var timeout = null;
     element.addEventListener('mouseover', function () {
