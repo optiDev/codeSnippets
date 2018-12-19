@@ -286,7 +286,7 @@ function optiSideScroll(element, direction, speed, distance, step) {
 }
 
 
-/*-----Delay function on hover events*/
+/*-----Delay function on hover events-----*/
 function delay(element, callback) {
     var timeout = null;
     element.addEventListener('mouseover', function () {
