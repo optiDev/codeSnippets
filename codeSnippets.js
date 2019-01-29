@@ -4,7 +4,7 @@ opti.wait([".el1", "#el3"], "myFunc", 300)
 
 opti.select(".myEl")
 
-opti.selectAll(".elementArray");
+opti.selectAll(".multipleElements");
 
 opti.addScript("http://www.google.com");
 
