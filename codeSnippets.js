@@ -1,3 +1,79 @@
+/*
+function myFunc() { }
+opti.wait([".el1", "#el3"], "myFunc", 300) 
+
+opti.select(".myEl")
+
+opti.selectAll(".elementArray");
+
+opti.addScript("http://www.google.com");
+
+opti.append(".MoveThis", ".ToHere")
+
+opti.prepend(".MoveThis", ".ToHere")
+
+opti.delete(".deleteMe");
+
+Returns search data depending on current site
+opti.localStore();
+
+opti.event("OPTI_Event_name")
+*/
+
+var opti = {
+	wait: function(els, func, time) {
+		time = time || 300;
+		var optiWait = setInterval(function() {
+			if(els.every(function(item) {
+				return document.querySelector(item);
+			})){
+				clearInterval(optiWait);
+				func ? window[func]() : null;
+            }
+		}, time);
+	},
+	select: function(selector) {
+		return document.querySelector(selector)
+	},
+	addScript: function(url) {
+		var tag = document.createElement("script");
+		tag.src = url;
+		document.body.appendChild(tag);
+	},
+	selectAll: function(selector) {
+		return Array.prototype.slice.call(document.querySelectorAll(selector));
+    },
+	append: function(thing, place) {
+		var thingToMove = document.querySelector(thing);
+		var placeToMove = document.querySelector(place);
+		placeToMove.appendChild(thingToMove);
+	},
+	prepend: function(thing, place) {
+		var thingToMove = document.querySelector(thing);
+		var placeToMove = document.querySelector(place);
+		placeToMoveTo.insertBefore(thingToMove, placeToMoveTo.firstChild);
+	},
+	delete: function(selector) {
+		var elementToRemove = document.querySelector(selector);
+		element.parentNode.removeChild(elementToRemove);
+	},
+	localStore: function() {
+		var currentSite = document.URL;
+		var siteCode;
+        if (currentSite.indexOf("www.tui.co.uk") !== -1) { siteCode = "th"; }
+        else if (currentSite.indexOf("www.firstchoice.co.uk") !== -1) { siteCode = "fc"; }
+        else { siteCode = "fj"; }
+		return JSON.parse(localStorage.getItem("user-search-data-" + siteCode));
+    },
+	event: function(eventName) {
+		eventName = eventName || "OPTI_Default_event";
+		window.optimizationVar = eventName;
+		Bootstrapper.ensEvent.trigger("Global Optimization Event");
+    }
+}
+
+
+
 /*-----Prepend element before another element-----*/
 var placeToMoveTo = document.querySelector("[SELECTOR]");
 var itemToMove = document.querySelector("[SELECTOR]");
