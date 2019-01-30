@@ -375,3 +375,28 @@ function delay(element, callback) {
         clearTimeout(timeout);
     });
 }
+
+/*-----Get search results through XHR request-----*/
+var xmlhttp = new XMLHttpRequest();
+var url = 'https://www.tui.co.uk/destinations/newDeals/customize';
+xmlhttp.onreadystatechange = function() {
+    /*Get the JSON data back and parse it into an object*/
+    if (this.readyState == 4 && this.status == 200) {
+	var respData = JSON.parse(this.responseText);
+	test(respData);
+    } else if (this.status == 404) {
+	console.log("didn't load");
+    }
+};
+var CSRFtoken = ''; // CSRFToken from customize XHR request on search results
+var myobj = {}; // searchCriteria from customize XHR request on search results
+var searchRequest = JSON.stringify(myobj);
+searchRequest = encodeURIComponent(searchRequest);
+/*Fire XHR request*/
+xmlhttp.open('POST', url, true);
+xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+xmlhttp.send('CSRFtoken=' + CSRFtoken + '&searchCriteria=' + searchRequest);
+
+function test(data) {
+    console.log(data);
+}
