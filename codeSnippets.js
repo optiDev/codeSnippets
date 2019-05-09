@@ -22,18 +22,24 @@ opti.event("OPTI_Event_name")
 
 var opti = {
 	wait: function(els, func, time) {
-		time = time || 300;
-		var optiWait = setInterval(function() {
-			if(els.every(function(item) {
-				return document.querySelector(item);
-			})){
+		return function() {
+			time = time || 300;
+			var optiWait = setInterval(function() {
+				if(els.every(function(item) {
+					return document.querySelector(item);
+				})){
+					clearInterval(optiWait);
+					clearTimeout(optiTimeout);
+					func ? window[func]() : null;
+				}
+			}, time);
+			var optiTimeout = setTimeout(function() {
 				clearInterval(optiWait);
-				func ? window[func]() : null;
-            }
-		}, time);
+			}, 10000);
+		}
 	},
 	select: function(selector) {
-		return document.querySelector(selector)
+		return document.querySelector(selector);
 	},
 	addScript: function(url) {
 		var tag = document.createElement("script");
@@ -50,7 +56,7 @@ var opti = {
 	},
 	prepend: function(thing, place) {
 		var thingToMove = document.querySelector(thing);
-		var placeToMove = document.querySelector(place);
+		var placeToMoveTo = document.querySelector(place);
 		placeToMoveTo.insertBefore(thingToMove, placeToMoveTo.firstChild);
 	},
 	delete: function(selector) {
@@ -69,7 +75,92 @@ var opti = {
 		eventName = eventName || "OPTI_Default_event";
 		window.optimizationVar = eventName;
 		Bootstrapper.ensEvent.trigger("Global Optimization Event");
-    }
+    },
+    checkDate: function(dateToCheck, datesToCompare, whatToCheck) {
+        var operators = {
+            "equalto": function(a, b) { return a === b },
+            "lessthan": function(a, b) { return a < b },
+            "greaterthan": function(a, b) { return a > b }
+        };
+        var check = whatToCheck.toLowerCase();
+        var checkDate = new Date(dateToCheck).getTime();
+        var sortedDates = datesToCompare.sort(function(a, b){return a - b});
+        var compDateOne = new Date(sortedDates[0]).getTime();
+        var compDateTwo = sortedDates.length > 1 ? new Date(sortedDates[1]).getTime() : null;
+        if (check === "equalto" || check === "greaterthan" || check === "lessthan") {
+            return operators[check](checkDate, compDateOne);
+        } else if (check === "between") {
+            return compDateOne <= checkDate && checkDate <= compDateTwo;
+        }
+    },
+    sortArray: function(array, prop, order) {
+        var returnArr = array.sort(function(a, b){ if(prop) {return a[prop] - b[prop]} else {return a - b}});
+        if (order === "decending") {
+            return returnArr.reverse();
+        } else {
+            return returnArr;
+        }
+    },
+    compareArray: function(arr1, arr2) {
+        return JSON.stringify(arr1) === JSON.stringify(arr2);
+    },
+    searchResultsData: function() {
+        return store.getState().bookflow_searchResultsList.ids;
+	},
+	debounce: function(func, wait, immediate) {
+		var timeout;
+		return function () {
+			var context = this,	args = arguments;
+			var later = function () {
+				timeout = null;
+				if (!immediate) {
+					window[func].apply(context, args);
+				}
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow) {
+				window[func].apply(context, args);
+			}
+		};
+	},
+	subscribe: function(func) {
+		if (typeof store === "object") {
+			var prevRes = opti.searchResultsData();
+			var prevSort = JSON.stringify(store.getState().searchResults_filterSortBy);
+			store.subscribe(function() {
+			var currResults = opti.searchResultsData();
+			if (!opti.compareArray(currResults, prevRes)) {
+				var currSort = JSON.stringify(store.getState().searchResults_filterSortBy);
+				var method = currResults.length > prevRes.length ? "paginated" : prevSort != currSort ? "sorted" : "filtered";
+				prevRes = currResults;
+				prevSort = currSort;
+				prevPaginate = currPaginate;
+				opti.storeData(func, method);
+			}
+		});
+		}
+	},
+	storeData: function(func, method) {
+		var optiArr = [];
+		var records = store.getState().bookflow_searchResultsList.records;
+		for (var optiRecord in records) {
+			optiArr.push(records[optiRecord]);
+		}
+		opti.sortArray(optiArr);
+		window[func](optiArr, method)
+	},
+	cloneObj: function(obj) {
+		return JSON.parse(JSON.stringify(obj));
+	},
+	find: function(stringArr, toFind, caseSensitive) {
+		if (!caseSensitive) {
+			toFind = toFind.toUpperCase();
+			stringArr = typeof stringArr === "string" ? stringArr.toUpperCase() : stringArr.map(function(x){ if (typeof x === "string") { return x.toUpperCase() } else { return x }});
+		}
+		return stringArr.indexOf(toFind) != -1;
+	}
 }
 
 
