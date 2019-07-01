@@ -21,9 +21,10 @@ opti.event("OPTI_Event_name")
 */
 
 var opti = {
-	wait: function(els, func, time) {
+	wait: function(els, func, time, timeout) {
 		return function() {
 			time = time || 300;
+                        timeout = timeout || 10000;
 			var optiWait = setInterval(function() {
 				if(els.every(function(item) {
 					return document.querySelector(item);
@@ -35,7 +36,7 @@ var opti = {
 			}, time);
 			var optiTimeout = setTimeout(function() {
 				clearInterval(optiWait);
-			}, 10000);
+			}, timeout);
 		}
 	},
 	select: function(selector) {
@@ -104,9 +105,6 @@ var opti = {
     compareArray: function(arr1, arr2) {
         return JSON.stringify(arr1) === JSON.stringify(arr2);
     },
-    searchResultsData: function() {
-        return store.getState().bookflow_searchResultsList.ids;
-	},
 	debounce: function(func, wait, immediate) {
 		var timeout;
 		return function () {
@@ -125,32 +123,6 @@ var opti = {
 			}
 		};
 	},
-	subscribe: function(func) {
-		if (typeof store === "object") {
-			var prevRes = opti.searchResultsData();
-			var prevSort = JSON.stringify(store.getState().searchResults_filterSortBy);
-			store.subscribe(function() {
-			var currResults = opti.searchResultsData();
-			if (!opti.compareArray(currResults, prevRes)) {
-				var currSort = JSON.stringify(store.getState().searchResults_filterSortBy);
-				var method = currResults.length > prevRes.length ? "paginated" : prevSort != currSort ? "sorted" : "filtered";
-				prevRes = currResults;
-				prevSort = currSort;
-				prevPaginate = currPaginate;
-				opti.storeData(func, method);
-			}
-		});
-		}
-	},
-	storeData: function(func, method) {
-		var optiArr = [];
-		var records = store.getState().bookflow_searchResultsList.records;
-		for (var optiRecord in records) {
-			optiArr.push(records[optiRecord]);
-		}
-		opti.sortArray(optiArr);
-		window[func](optiArr, method)
-	},
 	cloneObj: function(obj) {
 		return JSON.parse(JSON.stringify(obj));
 	},
@@ -160,7 +132,13 @@ var opti = {
 			stringArr = typeof stringArr === "string" ? stringArr.toUpperCase() : stringArr.map(function(x){ if (typeof x === "string") { return x.toUpperCase() } else { return x }});
 		}
 		return stringArr.indexOf(toFind) != -1;
-	}
+	},
+    group: function(array, key) {
+        return array.reduce(function(rv, x) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+            return rv;
+        }, {});
+    }
 }
 
 
