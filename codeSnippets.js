@@ -22,7 +22,7 @@ opti.event("OPTI_Event_name")
 
 var opti = {
 	wait: function(els, func, time, timeout) {
-		return function() {
+		(function() {
 			time = time || 300;
                         timeout = timeout || 10000;
 			var optiWait = setInterval(function() {
@@ -37,7 +37,7 @@ var opti = {
 			var optiTimeout = setTimeout(function() {
 				clearInterval(optiWait);
 			}, timeout);
-		}
+		})();
 	},
 	select: function(selector) {
 		return document.querySelector(selector);
