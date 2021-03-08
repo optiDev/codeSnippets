@@ -72,11 +72,15 @@ var opti = {
         else { siteCode = "fj"; }
 		return JSON.parse(localStorage.getItem("user-search-data-" + siteCode));
     },
+	/* Out of date, use the Telium version 08.03.2021 */
+	/*
 	event: function(eventName) {
 		eventName = eventName || "OPTI_Default_event";
 		window.optimizationVar = eventName;
 		Bootstrapper.ensEvent.trigger("Global Optimization Event");
     },
+    */
+	
     checkDate: function(dateToCheck, datesToCompare, whatToCheck) {
         var operators = {
             "equalto": function(a, b) { return a === b },
@@ -219,9 +223,23 @@ function clickFunction() {
 
 
 /*-----Event Tracking-----*/
+
+/* OUT OF DATE - Use Telium version below */
+/*
 window.optimizationVar = "[OPTI_EVENT NAME]"; // Call this something related to the event
 Bootstrapper.ensEvent.trigger("Global Optimization Event"); //Fire the Ensighten event which references the variable (Don't change)
+*/
 
+/*-----Event Tracking (Telium)-----*/
+var teliumWait = setInterval(function() {
+    var myButton = document.querySelector(".buttons");
+    if (myButton && window.utag && utag.link) {
+        clearInterval(teliumWait);
+        myButton.addEventListener('click', function() {
+            utag.link({ event_action: "Optimisation Event", event_category: "Optimisation", event_name: "Random test event name", event: 'tiq.on'})
+        });
+    }
+},300);
 
 /*-----Check & Set Cookie-----*/
 function getCookie(cname) {
