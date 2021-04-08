@@ -236,7 +236,7 @@ var teliumWait = setInterval(function() {
     if (myButton && window.utag && utag.link) {
         clearInterval(teliumWait);
         myButton.addEventListener('click', function() {
-            utag.link({ event_action: "Optimisation Event", event_category: "Optimisation", event_name: "Random test event name", event: 'tiq.on'})
+            utag.link({ eventAction: "Optimisation Event", eventCategory: "Optimisation", eventName: "Random test event name", event: 'tiq.on'})
         });
     }
 },300);
